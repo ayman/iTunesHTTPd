@@ -1,0 +1,22 @@
+*What is this?* iTunesHTTPD is the core application files for the
+ChumbiTunes Server (a lightweight Java HTTPd server to control
+iTunes). It's built to work with the ChumbiTunes Widget
+(http://bit.ly/YLUJW) for Chumbys, but you can use it with any web
+browser or application. I'll assume the commands are self explanitory:
+
+    * http://YOUR_MACs_IP:5050/playing
+    * http://YOUR_MACs_IP:5050/art
+    * http://YOUR_MACs_IP:5050/shuttle/previous
+    * http://YOUR_MACs_IP:5050/shuttle/playpause
+    * http://YOUR_MACs_IP:5050/shuttle/next
+    * http://YOUR_MACs_IP:5050/volume/
+    * http://YOUR_MACs_IP:5050/volume/LEVEL
+    * http://YOUR_MACs_IP:5050/crossdomain.xml
+    * http://YOUR_MACs_IP:5050/robots.txt
+
+*License:* No warranty. Use at your own risk. You know the fine
+print. This code is released under Creative Commons (CC).  Feel free
+to remix and swirl.
+
+*Download* A MacOS X Binary can be git here:
+ http://shamurai.com/bin/chumbiTunes/
