@@ -14,6 +14,8 @@ browser or application. I'll assume the commands are self explanitory:
     * http://YOUR_MACs_IP:5050/crossdomain.xml
     * http://YOUR_MACs_IP:5050/robots.txt
 
+Each command execs some Applescript to remote iTunes and get data.
+
 *License* No warranty. Use at your own risk. You know the fine
 print. This code is released under Creative Commons (CC).  Feel free
 to remix and swirl.
