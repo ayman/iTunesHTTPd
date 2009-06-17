@@ -80,7 +80,7 @@ public class ITunesController {
       "-e", "raw data of artwork 1 of current track",
       "-e", "end tell" };
     String sbytes = exec(args);
-    return hexToBytes(sbytes.substring(11));
+    return hexToBytes(sbytes.substring(11).toCharArray());
   }
   
   public static String shuttle(String subcommand) {
@@ -153,10 +153,7 @@ public class ITunesController {
     }    
     return status;
   }
-  
-  private static final char[] kDigits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a',
-  'b', 'c', 'd', 'e', 'f' };
-  
+    
   private static byte[] hexToBytes(char[] hex) {
     int length = hex.length / 2;
     byte[] raw = new byte[length];
@@ -164,21 +161,11 @@ public class ITunesController {
       int high = Character.digit(hex[i * 2], 16);
       int low = Character.digit(hex[i * 2 + 1], 16);
       int value = (high << 4) | low;
-      if (value > 127)
+      if (value > 127) {
         value -= 256;
+      }
       raw[i] = (byte) value;
     }
     return raw;
   }
-  
-  private static byte[] hexToBytes(String hex) {
-    return hexToBytes(hex.toCharArray());
-  }
-  
-  private static int hexToInt(char hex) {
-    int nib = Character.digit(hex, 16);
-    if (nib < 0)
-      throw new IllegalArgumentException("Invalid hex digit");
-    return nib;
-  }    
 }

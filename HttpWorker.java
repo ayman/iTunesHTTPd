@@ -21,9 +21,10 @@ public class HttpWorker implements Runnable, HostnameVerifier {
   
   final static int IMAGE_JPEG = 1;
   final static int IMAGE_GIF = 2;
-  final static int TEXT_PLAIN = 6;
+  final static int IMAGE_PNG = 3;
   final static int TEXT_XML = 4;
   final static int TEXT_HTML = 5;  
+  final static int TEXT_PLAIN = 6;
   
   public HttpWorker(HttpServerThread parent, 
                     Socket connectionsocket) {
