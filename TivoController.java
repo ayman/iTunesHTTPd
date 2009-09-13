@@ -12,6 +12,7 @@ import java.security.cert.*;
 import javax.net.ssl.*;
 
 public class TivoController implements HostnameVerifier {
+  public static final String TIVO = "tivo".intern();
   /* This port is hard coded on the Tivo Series 3 v9.1 or greater */
   public static final int TIVO_REMOTE_PORT = 31339;
   public static final String IRCODE = "IRCODE";

@@ -151,7 +151,7 @@ public class HttpWorker implements Runnable {
         } else {
           httpOut = ITunesController.volume(arg0);
         }
-      } else if ("tivo".intern() == command) {
+      } else if (TivoController.TIVO == command) {
         if (null == arg0 ||
             !arg0.matches("\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b")) {
           code = HttpURLConnection.HTTP_NOT_FOUND;
@@ -168,18 +168,18 @@ public class HttpWorker implements Runnable {
             TivoController.pause(arg0);
           }
         }
-      } else if ("boxee".intern() == command) {
-	if (arg1.matches("pause")) {
-	  BoxeeController.pause("127.0.0.1");
-	} else if (arg1.matches("play")) {
-	  BoxeeController.play("127.0.0.1");
-	} else if (arg1.matches("next")) {
-	  BoxeeController.next("127.0.0.1");
-	} else if (arg1.matches("previous")) {
-	  BoxeeController.previous("127.0.0.1");
-	} else if (arg1.matches("stop")) {
-	  BoxeeController.stop("127.0.0.1");
-	}
+      } else if (BoxeeController.BOXEE == command) {
+        if (arg1.matches("pause")) {
+          BoxeeController.pause("127.0.0.1");
+        } else if (arg1.matches("play")) {
+          BoxeeController.play("127.0.0.1");
+        } else if (arg1.matches("next")) {
+          BoxeeController.next("127.0.0.1");
+        } else if (arg1.matches("previous")) {
+          BoxeeController.previous("127.0.0.1");
+        } else if (arg1.matches("stop")) {
+          BoxeeController.stop("127.0.0.1");
+        }
       } else {
         code = 404;
         header = makeHttpHeader(HttpURLConnection.HTTP_NOT_FOUND); 

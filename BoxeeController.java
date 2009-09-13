@@ -12,6 +12,8 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class BoxeeController {
+  public static final String BOXEE = "boxee".intern();
+
   public static int BOXEE_DEFAULT_PORT = 8800;
   
   public static void next(String ip) {
