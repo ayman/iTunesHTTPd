@@ -1,11 +1,13 @@
-//
 //  ITunesController.java
 //  ChumbiTunes
 //
 //  Created by David Ayman Shamma on 6/8/09.
 //  Copyright (cc) 2009 shamurai.com. 
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,14 +65,14 @@ public class ITunesController {
   
   public static String capabilities() {
     String xml = "";
-        xml += "<item>";
+    xml += "<item>";
     xml += "<version>1.0.0.34</version>";
     xml += "<version_name>nebula</version_name>";
-        xml += "<version_major>1</version_major>";
+    xml += "<version_major>1</version_major>";
     xml += "<version_minor>0</version_minor>";
     xml += "<version_revision>34</version_revision>";
-        xml += "<capabilities>trackinfo, basicplayback</capabilities>";
-        xml += "</item>";
+    xml += "<capabilities>trackinfo, basicplayback</capabilities>";
+    xml += "</item>";
     return xml;
   }
   

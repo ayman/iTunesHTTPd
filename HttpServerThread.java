@@ -1,4 +1,3 @@
-//
 //  HttpServerThread.java
 //  ChumbiTunes
 //
@@ -6,8 +5,8 @@
 //  Portions taken from Jon Berg - http://turtlemeat.com
 //  Copyright (cc) 2009 shamurai.com. 
 
-import java.io.*;
-import java.net.*;
+import java.net.Socket;
+import java.net.ServerSocket;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -31,7 +30,7 @@ public class HttpServerThread extends Thread {
     ServerSocket serversocket = null;
     out("ChumbiTunes httpserver v1.0.0.34\n");
     try {
-      out("Trying to bind to localhost on port " + Integer.toString(port) + "...");
+      out("Binding to localhost on port " + Integer.toString(port) + "...");
       serversocket = new ServerSocket(port);
     }
     catch (Exception e) { 

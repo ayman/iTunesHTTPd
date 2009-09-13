@@ -1,4 +1,3 @@
-//
 //  HttpServerThread.java
 //  ChumbiTunes
 //
@@ -11,7 +10,7 @@ import java.net.*;
 import javax.net.ssl.*;
 import java.security.cert.*;
 
-public class HttpWorker implements Runnable, HostnameVerifier {
+public class HttpWorker implements Runnable {
   private HttpServerThread parent;
   private Socket connectionsocket;
   
@@ -26,6 +25,14 @@ public class HttpWorker implements Runnable, HostnameVerifier {
   final static int TEXT_HTML = 5;  
   final static int TEXT_PLAIN = 6;
   
+  final static String CROSSDOMAIN_XML = "<?xml version=\"1.0\"?>" +
+    "<!DOCTYPE cross-domain-policy SYSTEM " +
+    "\"http://www.adobe.com/xml/dtds/cross-domain-policy.dtd\">" +
+    "<cross-domain-policy>" +
+    "<site-control permitted-cross-domain-policies=\"master-only\" />"+
+    "<allow-access-from domain=\"*\" />" +
+    "</cross-domain-policy>";
+
   public HttpWorker(HttpServerThread parent, 
                     Socket connectionsocket) {
     this.parent = parent;
@@ -73,7 +80,8 @@ public class HttpWorker implements Runnable, HostnameVerifier {
       } else if (request[0] == "HEAD".intern()) { 
         method = HttpWorker.METHOD_HEAD;
       } else { 
-        output.writeBytes(makeHttpHeader(HttpURLConnection.HTTP_NOT_IMPLEMENTED));
+        String ni = makeHttpHeader(HttpURLConnection.HTTP_NOT_IMPLEMENTED);
+        output.writeBytes(ni);
         output.writeBytes("<h2>501 Not Implemented</h2>");
         output.close();
         return;
@@ -106,13 +114,7 @@ public class HttpWorker implements Runnable, HostnameVerifier {
       } else if (command == "crossdomain.xml".intern()) {
         header = makeHttpHeader(HttpURLConnection.HTTP_OK, 
                                 HttpWorker.TEXT_XML);
-        httpOut = "<?xml version=\"1.0\"?>";
-        httpOut += "<!DOCTYPE cross-domain-policy SYSTEM ";
-        httpOut += "\"http://www.adobe.com/xml/dtds/cross-domain-policy.dtd\">";
-        httpOut += "<cross-domain-policy>";
-        httpOut += "<site-control permitted-cross-domain-policies=\"master-only\" />";
-        httpOut += "<allow-access-from domain=\"*\" />";
-        httpOut += "</cross-domain-policy>";
+        httpOut = CROSSDOMAIN_XML;
       } else if (ITunesController.PLAYING == command) {
         httpOut = ITunesController.playing();
         if (null != httpOut) {
@@ -150,58 +152,34 @@ public class HttpWorker implements Runnable, HostnameVerifier {
           httpOut = ITunesController.volume(arg0);
         }
       } else if ("tivo".intern() == command) {
-        if (null == arg0) {
+        if (null == arg0 ||
+            !arg0.matches("\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b")) {
           code = HttpURLConnection.HTTP_NOT_FOUND;
           header = makeHttpHeader(HttpURLConnection.HTTP_NOT_FOUND); 
           httpOut = "<H2>Error, Unknown Request</H2>";
-        } else {          
-          final TrustManager[] trustAllCerts = new TrustManager[] { 
-            new X509TrustManager() {
-              public void checkClientTrusted(final X509Certificate[] chain, 
-                                             final String authType ) 
-                throws CertificateException {}
-              public void checkServerTrusted(final X509Certificate[] chain, 
-                                             final String authType ) 
-                throws CertificateException {}
-              public X509Certificate[] getAcceptedIssuers() {
-                return null;
-              }
-            } 
-          };
-          
-          final SSLContext sslContext = SSLContext.getInstance("SSL");
-          sslContext.init(null, 
-                          trustAllCerts, 
-                          new java.security.SecureRandom());
-          final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();          
-          final String login = "tivo";
-          final String password = arg1;
-          Authenticator.setDefault(new Authenticator() {
-              protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication (login, 
-                                                   password.toCharArray());
-              }
-            });
-          
-          String tivoUrl = "https://" + arg0;
-          tivoUrl += "/TiVoConnect?Command=QueryContainer";
-          tivoUrl += "&Container=%2FNowPlaying&Recurse=Yes";
-          System.out.println(tivoUrl);
-          URL url = new URL(tivoUrl);
-          HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
-          con.setHostnameVerifier(this);
-          con.setSSLSocketFactory(sslSocketFactory);
-          con.setRequestMethod("GET");
-          InputStreamReader isr;
-          isr = new InputStreamReader(con.getInputStream());
-          BufferedReader reader = new BufferedReader(isr);
-          String line = null;
-          while((line = reader.readLine()) != null) {
-            httpOut += line;
+        } else {
+          if (arg1.matches("[\\d]+")) {            
+            header = makeHttpHeader(HttpURLConnection.HTTP_OK,
+                                    HttpWorker.TEXT_XML);            
+            httpOut = TivoController.nowPlaying(arg0, arg1);
+          } else if (arg1.matches("pause")) {
+            TivoController.pause(arg0);
+          } else if (arg1.matches("play")) {
+            TivoController.pause(arg0);
           }
-          header = makeHttpHeader(HttpURLConnection.HTTP_OK,
-                                  HttpWorker.TEXT_XML);
         }
+      } else if ("boxee".intern() == command) {
+	if (arg1.matches("pause")) {
+	  BoxeeController.pause("127.0.0.1");
+	} else if (arg1.matches("play")) {
+	  BoxeeController.play("127.0.0.1");
+	} else if (arg1.matches("next")) {
+	  BoxeeController.next("127.0.0.1");
+	} else if (arg1.matches("previous")) {
+	  BoxeeController.previous("127.0.0.1");
+	} else if (arg1.matches("stop")) {
+	  BoxeeController.stop("127.0.0.1");
+	}
       } else {
         code = 404;
         header = makeHttpHeader(HttpURLConnection.HTTP_NOT_FOUND); 
@@ -228,11 +206,7 @@ public class HttpWorker implements Runnable, HostnameVerifier {
       output.close();
     } catch (Exception e) {}                           
   }
-  
-  public boolean verify(String hostname, SSLSession session) {
-    return true;
-  }
-  
+    
   private String makeHttpHeader(int return_code) {
     return makeHttpHeader(return_code, 0);
   }

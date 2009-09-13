@@ -2,14 +2,18 @@
 //  File:   AboutBox.java
 //  Copyright (cc) 2009 shamurai.com. 
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.Font;
+import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import javax.swing.*;
-
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import java.lang.reflect.Method;
-
 import com.apple.eio.FileManager;
 
 public class AboutBox extends JFrame implements ActionListener {
@@ -44,7 +48,7 @@ public class AboutBox extends JFrame implements ActionListener {
     aboutLabel[0] = new JLabel("");
     aboutLabel[1] = new JLabel(resbundle.getString("frameConstructor"));
     aboutLabel[1].setFont(titleFont);
-    aboutLabel[2] = new JLabel(resbundle.getString("appVersion"));
+    aboutLabel[2] = new JLabel("v" + resbundle.getString("appVersion"));
     aboutLabel[2].setFont(bodyFont);
     aboutLabel[3] = new JLabel("<html><u>http://tinyurl.com/chumbiTunes</u></html>");
     aboutLabel[3].setForeground(Color.BLUE);
@@ -68,39 +72,10 @@ public class AboutBox extends JFrame implements ActionListener {
     this.setLocation(aboutLeft, aboutTop);
     this.setSize(aboutWidth, aboutHeight);
   }
-
-
+  
   class SymWindow extends java.awt.event.WindowAdapter {
     public void windowClosing(java.awt.event.WindowEvent event) {
       setVisible(false);
-    }
-  }
-
-  class UrlMouseAdapter extends java.awt.event.MouseAdapter {
-    private String url;
-    
-    public UrlMouseAdapter(String url) {
-      this.url = url;
-    }
-
-    public void mouseEntered(MouseEvent e) {
-      JLabel jl = (JLabel) e.getSource();
-      jl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)) ;
-    }
-    
-    public void mouseExited(MouseEvent e) {
-      JLabel jl = (JLabel) e.getSource();
-      jl.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR)) ;
-    }
-    
-    public void mouseClicked(MouseEvent e) {
-      try {
-        Class fileMgr = Class.forName("com.apple.eio.FileManager");
-        Method openURL = fileMgr.getDeclaredMethod("openURL", 
-                                                   new Class[] {String.class});
-        openURL.invoke(null, new Object[] {url});
-      }
-      catch (Exception exception) {}
     }
   }
     
