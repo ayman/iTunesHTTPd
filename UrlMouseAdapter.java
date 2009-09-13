@@ -2,12 +2,13 @@
 //  ChumbiTunes
 //  Copyright (cc) 2009 shamurai.com. 
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import java.lang.reflect.Method;
 
-public class UrlMouseAdapter extends java.awt.event.MouseAdapter {
+public class UrlMouseAdapter extends MouseAdapter {
   private String url;
   
   public UrlMouseAdapter(String url) {

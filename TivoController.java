@@ -4,12 +4,28 @@
 //  Created by David Ayman Shamma on 9/7/09.
 //  Copyright (cc) 2009 shamurai.com. 
 
-import java.io.*;
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.net.*;
-import java.security.*;
-import java.security.cert.*;
-import javax.net.ssl.*;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
+import java.net.URL;
+import java.net.Socket;
+import java.net.InetAddress;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 public class TivoController implements HostnameVerifier {
   public static final String TIVO = "tivo".intern();

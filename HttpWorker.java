@@ -5,10 +5,13 @@
 //  Portions taken from Jon Berg - http://turtlemeat.com
 //  Copyright (cc) 2009 shamurai.com. 
 
-import java.io.*;
-import java.net.*;
-import javax.net.ssl.*;
-import java.security.cert.*;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.HttpURLConnection;
+import java.net.Socket;
 
 public class HttpWorker implements Runnable {
   private HttpServerThread parent;
@@ -151,7 +154,8 @@ public class HttpWorker implements Runnable {
         } else {
           httpOut = ITunesController.volume(arg0);
         }
-      } else if (TivoController.TIVO == command) {
+      } else if (
+TivoController.TIVO == command) {
         if (null == arg0 ||
             !arg0.matches("\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b")) {
           code = HttpURLConnection.HTTP_NOT_FOUND;
